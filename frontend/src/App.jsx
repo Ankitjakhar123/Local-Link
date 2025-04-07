@@ -20,6 +20,15 @@ import SearchBar from "./components/SearchBar";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+// Admin Pages
+import AdminList from "./admin/pages/AdminList";
+import AdminAdd from "./admin/pages/AdminAdd";
+import AdminOrders from "./admin/pages/AdminOrders";
+
+// Admin Components
+import AdminNavbar from "./admin/components/AdminNavbar";
+import AdminSidebar from "./admin/components/AdminSidebar";
+
 const App = () => {
   return (
     <div className="min-h-screen flex flex-col font-[Outfit] overflow-x-hidden">
@@ -49,6 +58,43 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/place-order" element={<PlaceOrder />} />
           <Route path="/orders" element={<Orders />} />
+          {/* Admin Panel Routes */}
+          <Route
+            path="/admin"
+            element={
+              <>
+                <AdminNavbar />
+                <div className="flex">
+                  <AdminSidebar />
+                  <AdminList />
+                </div>
+              </>
+            }
+          />
+          <Route
+            path="/admin/orders"
+            element={
+              <>
+                <AdminNavbar />
+                <div className="flex">
+                  <AdminSidebar />
+                  <AdminOrders />
+                </div>
+              </>
+            }
+          />
+          <Route
+            path="/admin/add"
+            element={
+              <>
+                <AdminNavbar />
+                <div className="flex">
+                  <AdminSidebar />
+                  <AdminAdd />
+                </div>
+              </>
+            }
+          />
         </Routes>
       </main>
 

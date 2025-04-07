@@ -76,6 +76,7 @@ const Navbar = () => {
                     <>
                       <NavLink to="/profile" className="block hover:text-indigo-600">👤 My Profile</NavLink>
                       <NavLink to="/orders" className="block hover:text-indigo-600">📦 Orders</NavLink>
+                      <NavLink to="/admin" className="block hover:text-indigo-600">🛠️ Admin Panel</NavLink>
                       <button onClick={() => setIsLoggedIn(false)} className="text-left w-full hover:text-red-500">🚪 Logout</button>
                     </>
                   ) : (
