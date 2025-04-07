@@ -24,7 +24,7 @@ const App = () => {
   return (
     <div className="min-h-screen flex flex-col font-[Outfit] overflow-x-hidden">
       {/* ✅ Toast Notification container */}
-      {/* <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} newestOnTop={true} /> */}
+      {/* <ToastContainer position="top-right" autoClose={300000} hideProgressBar={false} newestOnTop={true} /> */}
       <ToastContainer
         position="top-right" // 👈 aligns right side
         autoClose={2000}
