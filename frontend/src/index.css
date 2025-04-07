@@ -4,7 +4,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* 🌐 Base Reset & Typography */
+/* 🌐 Reset & Typography */
 * {
   margin: 0;
   padding: 0;
@@ -16,6 +16,12 @@
 body {
   background-color: #f8f9fc;
   color: #111827;
+  transition: background-color 0.4s ease, color 0.4s ease;
+}
+
+html.dark body {
+  background-color: #111827;
+  color: #f9fafb;
 }
 
 /* 🎨 Fonts */
@@ -28,21 +34,31 @@ body {
 /* 📌 Navbar Styling */
 .navbar {
   @apply fixed top-0 w-full z-50 flex items-center justify-between px-6 py-4 shadow-lg;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(16px);
   border-bottom: 1px solid rgba(229, 231, 235, 0.6);
-  transition: all 0.3s ease-in-out;
+  transition: all 0.4s ease-in-out;
+}
+
+html.dark .navbar {
+  background: rgba(31, 41, 55, 0.9);
+  border-bottom: 1px solid rgba(55, 65, 81, 0.6);
 }
 
 /* 🔗 Nav Links */
 a {
-  @apply transition-all duration-200;
+  @apply transition-all duration-300;
+  color: inherit;
+  position: relative;
+}
+
+a:hover {
+  color: #4f46e5;
 }
 
 a.active {
   color: #6366f1;
   font-weight: 600;
-  position: relative;
 }
 
 a.active::after {
@@ -54,6 +70,14 @@ a.active::after {
   height: 2px;
   background-color: #6366f1;
   border-radius: 2px;
+}
+
+html.dark a.active {
+  color: #a5b4fc;
+}
+
+html.dark a.active::after {
+  background-color: #a5b4fc;
 }
 
 /* 📱 Mobile Active Nav */
@@ -68,17 +92,22 @@ a.active::after {
 
 /* 🧊 Glass Card Component */
 .glass-card {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(20px);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(16px);
   border-radius: 1.25rem;
   padding: 2rem;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.06);
+  transition: all 0.4s ease-in-out;
 }
 
 .glass-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+}
+
+html.dark .glass-card {
+  background: rgba(31, 41, 55, 0.7);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
 }
 
 /* 💎 Premium Button */
@@ -92,6 +121,15 @@ a.active::after {
   transform: translateY(-2px);
   background: linear-gradient(135deg, #4338ca, #6d28d9);
   box-shadow: 0 8px 24px rgba(99, 102, 241, 0.4);
+}
+
+html.dark .btn-premium {
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  box-shadow: 0 4px 14px rgba(165, 180, 252, 0.2);
+}
+
+html.dark .btn-premium:hover {
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
 }
 
 /* ⏳ Smooth Fade Animation */
@@ -117,15 +155,19 @@ section {
 
 /* 🎁 Card Hover Effect */
 .card-hover {
-  transition: all 0.3s ease-in-out;
-  border-radius: 1rem;
   background-color: white;
+  border-radius: 1rem;
+  transition: all 0.3s ease-in-out;
   box-shadow: 0 2px 20px rgba(0, 0, 0, 0.04);
 }
 
 .card-hover:hover {
   transform: translateY(-4px);
   box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
+}
+
+html.dark .card-hover {
+  background-color: #374151;
 }
 
 /* 🧁 Soft Shadow Buttons */
@@ -140,6 +182,16 @@ section {
   background-color: #f3f4f6;
 }
 
+html.dark .btn-soft {
+  background: #1f2937;
+  color: #f9fafb;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+html.dark .btn-soft:hover {
+  background-color: #374151;
+}
+
 /* 🧹 Toast Margin Fix */
 .toast-below-navbar {
   margin-top: 80px;
@@ -147,4 +199,9 @@ section {
 
 .Toastify__toast-container {
   z-index: 100;
+}
+
+html.dark .Toastify__toast-container {
+  background-color: #1f2937;
+  color: #f9fafb;
 }

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useContext } from "react";
+import React, { useState, useRef, useContext, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { assets } from "../assets/assets";
 import { ShopContext } from "../context/ShopContext";
@@ -10,35 +10,46 @@ const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const profileRef = useRef();
+  const [darkMode, setDarkMode] = useState(false);
 
   const { setShowSearch, getCartCount } = useContext(ShopContext);
   const cartCount = getCartCount();
 
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [darkMode]);
+
   return (
     <>
-      {/* 🌐 Glass Navbar */}
-      <div className="navbar">
-        <div className="max-w-[1400px] mx-auto w-full flex items-center justify-between">
-          {/* 🔗 Logo */}
+      <nav className="backdrop-blur-lg bg-white/60 dark:bg-gray-900/60 border-b border-gray-200 dark:border-gray-700 shadow-md fixed top-0 w-full z-50 transition-colors duration-500">
+        <div className="max-w-[1400px] mx-auto px-4 sm:px-8 py-3 flex items-center justify-between">
+          {/* Logo */}
           <Link to="/">
             <img src={assets.logo} className="w-28 sm:w-36" alt="Logo" />
           </Link>
 
-          {/* 🌐 Center Nav Links */}
-          <ul className="hidden sm:flex gap-6 text-sm text-gray-800">
-            <NavLink to="/" className="hover:text-indigo-600">Home</NavLink>
-            <NavLink to="/collection" className="hover:text-indigo-600">Collections</NavLink>
-            {/* <NavLink to="/men" className="hover:text-indigo-600">Men</NavLink>
-            <NavLink to="/women" className="hover:text-indigo-600">Women</NavLink>
-            <NavLink to="/kids" className="hover:text-indigo-600">Kids</NavLink> */}
-            <NavLink to="/about" className="hover:text-indigo-600">About</NavLink>
-            <NavLink to="/contact" className="hover:text-indigo-600">Contact</NavLink>
-            <NavLink to="/track-order" className="hover:text-indigo-600">Track Order</NavLink>
+          {/* Desktop Nav */}
+          <ul className="hidden sm:flex gap-8 text-sm font-medium items-center text-gray-800 dark:text-gray-100">
+            {["Home", "Collections", "About", "Contact", "Track Order"].map((item, idx) => (
+              <NavLink
+                key={idx}
+                to={`/${item === "Home" ? "" : item.toLowerCase().replace(" ", "-")}`}
+                className={({ isActive }) =>
+                  `transition-all hover:text-blue-600 dark:hover:text-blue-400 ${isActive ? "text-blue-600 dark:text-blue-400 font-semibold" : ""}`
+                }
+              >
+                {item}
+              </NavLink>
+            ))}
           </ul>
 
-          {/* 🎯 Right Side Icons */}
+          {/* Right Side Icons */}
           <div className="flex items-center gap-4 sm:gap-5 relative">
-            {/* 🔍 Search */}
+            {/* Search Icon */}
             <img
               onClick={() => setShowSearch(true)}
               src={assets.search_icon}
@@ -46,17 +57,39 @@ const Navbar = () => {
               alt="Search"
             />
 
-            {/* 🛒 Cart */}
+            {/* Cart Icon */}
             <Link to="/cart" className="relative">
               <img src={assets.cart_icon} className="w-6" alt="Cart" />
               {cartCount > 0 && (
-                <p className="absolute right-[-6px] top-[-6px] w-5 h-5 text-center leading-5 bg-red-500 text-white rounded-full text-xs shadow-md">
+                <span className="absolute -top-2 -right-2 w-5 h-5 text-xs bg-red-500 text-white rounded-full flex items-center justify-center shadow-md">
                   {cartCount}
-                </p>
+                </span>
               )}
             </Link>
 
-            {/* 👤 Profile */}
+            {/* Dark Mode Toggle */}
+            <button
+              onClick={() => setDarkMode(!darkMode)}
+              className="p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:scale-110 transition-transform"
+              title="Toggle Theme"
+            >
+              {darkMode ? (
+                <svg className="w-5 h-5 text-yellow-300" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M10 15a5 5 0 010-10 5 5 0 010 10z" />
+                  <path
+                    fillRule="evenodd"
+                    d="M10 2a1 1 0 01.894.553l.382.764a1 1 0 01-.106.96l-.678.849a1 1 0 00.15 1.337l.633.633a1 1 0 01.15 1.337l-.678.849a1 1 0 00.106.96l.382.764A1 1 0 0110 18a1 1 0 01-.894-.553l-.382-.764a1 1 0 01.106-.96l.678-.849a1 1 0 00-.15-1.337l-.633-.633a1 1 0 01-.15-1.337l.678-.849a1 1 0 00-.106-.96l-.382-.764A1 1 0 0110 2z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              ) : (
+                <svg className="w-5 h-5 text-gray-700" fill="currentColor" viewBox="0 0 20 20">
+                  <path d="M17.293 13.293a8 8 0 01-11.586 0 1 1 0 111.414-1.414 6 6 0 008.758 0 1 1 0 111.414 1.414z" />
+                </svg>
+              )}
+            </button>
+
+            {/* Profile Dropdown */}
             <div
               className="relative"
               onMouseEnter={() => {
@@ -69,63 +102,63 @@ const Navbar = () => {
                 }, 300);
               }}
             >
-              <img className="w-6 cursor-pointer hover:scale-105 transition-all" src={assets.profile_icon} alt="Profile" />
+              <img src={assets.profile_icon} className="w-6 cursor-pointer hover:scale-110 transition-all" alt="Profile" />
               {isProfileOpen && (
-                <div className="absolute right-0 z-20 bg-white shadow-lg w-44 py-3 px-4 text-gray-700 rounded-xl mt-2 space-y-2 animate-fade-in-up">
+                <div className="absolute right-0 mt-3 py-3 px-4 w-48 bg-white dark:bg-gray-800 shadow-xl rounded-xl animate-fade-in-up text-sm z-40 space-y-2 text-gray-700 dark:text-gray-100">
                   {isLoggedIn ? (
                     <>
                       <NavLink to="/profile" className="block hover:text-indigo-600">👤 My Profile</NavLink>
                       <NavLink to="/orders" className="block hover:text-indigo-600">📦 Orders</NavLink>
                       <NavLink to="/admin" className="block hover:text-indigo-600">🛠️ Admin Panel</NavLink>
-                      <button onClick={() => setIsLoggedIn(false)} className="text-left w-full hover:text-red-500">🚪 Logout</button>
+                      <button onClick={() => setIsLoggedIn(false)} className="block text-left w-full hover:text-red-500">🚪 Logout</button>
                     </>
                   ) : (
-                    <>
-                      <NavLink to="/login" className="block hover:text-indigo-600">🔐 Login</NavLink>
-                    </>
+                    <NavLink to="/login" className="block hover:text-indigo-600">🔐 Login</NavLink>
                   )}
                 </div>
               )}
             </div>
 
-            {/* 🧃 Toasts */}
-            <ToastContainer
-              position="top-right"
-              autoClose={2000}
-              hideProgressBar
-              newestOnTop
-              closeOnClick
-              rtl={false}
-              pauseOnFocusLoss
-              draggable
-              pauseOnHover
-              className="toast-below-navbar"
-            />
-
-            {/* 📱 Menu (Mobile) */}
+            {/* Mobile Menu Icon */}
             <img
               onClick={() => setMenuVisible(!menuVisible)}
               src={assets.menu_icon}
-              className="w-6 cursor-pointer sm:hidden"
+              className="w-6 sm:hidden cursor-pointer"
               alt="Menu"
             />
           </div>
         </div>
-      </div>
+      </nav>
 
-      {/* 📱 Mobile Sidebar */}
+      {/* Mobile Sidebar */}
       {menuVisible && (
-        <div className="sm:hidden fixed top-16 left-0 w-full bg-white z-40 shadow-md p-4 space-y-4 animate-fade-in-up">
-          <NavLink to="/" onClick={() => setMenuVisible(false)} className="block">Home</NavLink>
-          <NavLink to="/collection" onClick={() => setMenuVisible(false)} className="block">Collections</NavLink>
-          <NavLink to="/men" onClick={() => setMenuVisible(false)} className="block">Men</NavLink>
-          <NavLink to="/women" onClick={() => setMenuVisible(false)} className="block">Women</NavLink>
-          <NavLink to="/kids" onClick={() => setMenuVisible(false)} className="block">Kids</NavLink>
-          <NavLink to="/about" onClick={() => setMenuVisible(false)} className="block">About</NavLink>
-          <NavLink to="/contact" onClick={() => setMenuVisible(false)} className="block">Contact</NavLink>
-          <NavLink to="/track-order" onClick={() => setMenuVisible(false)} className="block">Track Order</NavLink>
+        <div className="sm:hidden fixed top-[60px] left-0 w-full bg-white dark:bg-gray-900 z-40 shadow-md px-6 py-5 space-y-4 animate-fade-in-up">
+          {["Home", "Collections", "About", "Contact", "Track Order"].map((item, idx) => (
+            <NavLink
+              key={idx}
+              to={`/${item === "Home" ? "" : item.toLowerCase().replace(" ", "-")}`}
+              onClick={() => setMenuVisible(false)}
+              className="block text-gray-800 dark:text-gray-100 text-base hover:text-indigo-600 dark:hover:text-indigo-400"
+            >
+              {item}
+            </NavLink>
+          ))}
         </div>
       )}
+
+      {/* Toast */}
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        className="z-[9999]"
+      />
     </>
   );
 };

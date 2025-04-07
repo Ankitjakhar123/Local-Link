@@ -28,6 +28,7 @@ import AdminOrders from "./admin/pages/AdminOrders";
 // Admin Components
 import AdminNavbar from "./admin/components/AdminNavbar";
 import AdminSidebar from "./admin/components/AdminSidebar";
+import Info from "./pages/Info";
 
 const App = () => {
   return (
@@ -95,6 +96,7 @@ const App = () => {
               </>
             }
           />
+          <Route path="/info/:type" element={<Info  />} />
         </Routes>
       </main>
 
