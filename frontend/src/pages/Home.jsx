@@ -7,7 +7,7 @@ import NewsletterBox from '../components/NewsletterBox';
 
 const Home = () => {
   return (
-    <div className="w-full px-4">
+    <div className="w-full ">
       {/* Hero is full width already, including background */}
       <Hero />
 

@@ -2,82 +2,14 @@ import React, { useContext, useEffect, useState } from 'react';
 import { ShopContext } from '../context/ShopContext';
 import { assets } from '../assets/assets';
 import Title from '../components/Title';
-import { useSearchParams } from 'react-router-dom';
 
 const Collection = () => {
-  const { products, search, showSearch } = useContext(ShopContext);
-  const [searchParams] = useSearchParams();
-  const [showFilter, setShowFilter] = useState(false);
-  const [filterProducts, setFilterProducts] = useState([]);
+  const { products } = useContext(ShopContext);
+  const [showFilter, setShowFilter] = useState(true); // Open by default
   const [category, setCategory] = useState([]);
   const [subCategory, setSubCategory] = useState([]);
   const [sortType, setSortType] = useState('relavent');
-
-  useEffect(() => {
-    const urlCategory = searchParams.get("category");
-    if (urlCategory) setCategory([urlCategory]);
-  }, [searchParams]);
-
-  const toggleCategory = (e) => {
-    if (category.includes(e.target.value)) {
-      setCategory((prev) => prev.filter((item) => item !== e.target.value));
-    } else {
-      setCategory((prev) => [...prev, e.target.value]);
-    }
-  };
-
-  const toggleSubCategory = (e) => {
-    if (subCategory.includes(e.target.value)) {
-      setSubCategory((prev) => prev.filter((item) => item !== e.target.value));
-    } else {
-      setSubCategory((prev) => [...prev, e.target.value]);
-    }
-  };
-
-  const applyFilter = () => {
-    let productsCopy = products.slice();
-
-    if (showSearch && search) {
-      productsCopy = productsCopy.filter(item => item.name.toLowerCase().includes(search.toLowerCase()));
-    }
-
-    if (category.length > 0) {
-      productsCopy = productsCopy.filter((item) => category.includes(item.category));
-    }
-
-    if (subCategory.length > 0) {
-      productsCopy = productsCopy.filter((item) => subCategory.includes(item.subCategory));
-    }
-
-    setFilterProducts(productsCopy);
-  };
-
-  const sortProduct = () => {
-    let fpCopy = [...filterProducts];
-    switch (sortType) {
-      case 'low-high':
-        fpCopy.sort((a, b) => a.price - b.price);
-        break;
-      case 'high-low':
-        fpCopy.sort((a, b) => b.price - a.price);
-        break;
-      default:
-        return;
-    }
-    setFilterProducts(fpCopy);
-  };
-
-  useEffect(() => {
-    setFilterProducts(products);
-  }, [products]);
-
-  useEffect(() => {
-    applyFilter();
-  }, [category, subCategory, search, showSearch]);
-
-  useEffect(() => {
-    sortProduct();
-  }, [sortType]);
+  const [filtered, setFiltered] = useState([]);
 
   const allHomepageCategories = [
     'Electrical Tools',
@@ -89,15 +21,59 @@ const Collection = () => {
     'Lighting',
     'Furniture',
     'Storage Solutions',
-    'Pet Supplies'
+    'Pet Supplies',
   ];
+
+  // Filter logic only if any filter is selected
+  useEffect(() => {
+    let temp = [...products];
+
+    if (category.length > 0) {
+      temp = temp.filter(item => category.includes(item.category));
+    }
+
+    if (subCategory.length > 0) {
+      temp = temp.filter(item => subCategory.includes(item.subCategory));
+    }
+
+    if (category.length === 0 && subCategory.length === 0) {
+      setFiltered(products); // show all if no filters selected
+    } else {
+      setFiltered(temp);
+    }
+  }, [category, subCategory, products]);
+
+  // Sort logic
+  useEffect(() => {
+    let sorted = [...filtered];
+    if (sortType === 'low-high') {
+      sorted.sort((a, b) => a.price - b.price);
+    } else if (sortType === 'high-low') {
+      sorted.sort((a, b) => b.price - a.price);
+    }
+    setFiltered(sorted);
+  }, [sortType]);
+
+  const toggleCategory = (e) => {
+    const value = e.target.value;
+    setCategory(prev =>
+      prev.includes(value) ? prev.filter(i => i !== value) : [...prev, value]
+    );
+  };
+
+  const toggleSubCategory = (e) => {
+    const value = e.target.value;
+    setSubCategory(prev =>
+      prev.includes(value) ? prev.filter(i => i !== value) : [...prev, value]
+    );
+  };
 
   return (
     <div className="flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 border-t bg-gradient-to-br from-white to-blue-50 dark:from-gray-900 dark:to-gray-950 transition-all duration-500 px-4 sm:px-10">
       {/* Filter Option */}
       <div className="min-w-60">
         <p onClick={() => setShowFilter(!showFilter)} className="my-2 text-xl flex items-center cursor-pointer gap-2 text-gray-900 dark:text-white">
-          <img className={`h-3 sm:hidden ${showFilter ? 'rotate-90' : ''}`} src={assets.dropdown_icon} alt="" />
+          <img className={`h-3 sm:hidden transition-transform ${showFilter ? 'rotate-90' : ''}`} src={assets.dropdown_icon} alt="" />
           FILTERS
         </p>
 
@@ -107,7 +83,7 @@ const Collection = () => {
           <div className="flex flex-col gap-2 text-sm font-light text-gray-700 dark:text-gray-300">
             {allHomepageCategories.map((item, idx) => (
               <label key={idx} className="flex items-center gap-2">
-                <input className="w-3" type="checkbox" value={item} onChange={toggleCategory} /> {item}
+                <input className="w-3" type="checkbox" value={item} onChange={toggleCategory} checked={category.includes(item)} /> {item}
               </label>
             ))}
           </div>
@@ -119,7 +95,7 @@ const Collection = () => {
           <div className="flex flex-col gap-2 text-sm font-light text-gray-700 dark:text-gray-300">
             {['Topwear', 'Bottomwear', 'Winterwear'].map((item, idx) => (
               <label key={idx} className="flex items-center gap-2">
-                <input className="w-3" type="checkbox" value={item} onChange={toggleSubCategory} /> {item}
+                <input className="w-3" type="checkbox" value={item} onChange={toggleSubCategory} checked={subCategory.includes(item)} /> {item}
               </label>
             ))}
           </div>
@@ -139,7 +115,7 @@ const Collection = () => {
 
         {/* Map Products */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-          {filterProducts.map((item, index) => (
+          {filtered.map((item, index) => (
             <div
               key={index}
               className="cursor-pointer group relative bg-white/30 dark:bg-white/10 backdrop-blur-lg border border-white/30 dark:border-white/20 rounded-2xl p-5 flex flex-col items-center justify-center text-center shadow-xl hover:scale-105 transition-transform duration-300"

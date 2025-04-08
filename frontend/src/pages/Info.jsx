@@ -2,6 +2,8 @@ import React from "react";
 import { useParams } from "react-router-dom";
 
 const infoContent = {
+  
+  
   faqs: {
     title: "Frequently Asked Questions",
     content: (

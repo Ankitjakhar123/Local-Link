@@ -56,7 +56,7 @@ import p_img52 from './p_img52.png'
 
 
 import logo from './logo.png'
-import hero_img from './hero_img.png'
+import hero_img from './hero_img.jpg'
 import cart_icon from './cart_icon.png'
 import bin_icon from './bin_icon.png'
 import dropdown_icon from './dropdown_icon.png'
@@ -73,6 +73,11 @@ import contact_img from './contact_img.png'
 import razorpay_logo from './razorpay_logo.png'
 import stripe_logo from './stripe_logo.png'
 import cross_icon from './cross_icon.png'
+import instagram_icon from './instagram_icon.png'
+import linkedin_icon from './linkedin_icon.png'
+import twitter_icon from './twitter_icon.png'
+import facebook_icon from './facebook_icon.png'
+
 // Category images for LatestCollection.jsx
 import electrical_tools from './electrical_tools.png'     // Electrical Tools
 import kitchen_essentials from './kitchen_essentials.jpg';    // Kitchen Essentials
@@ -117,7 +122,11 @@ export const assets = {
     lighting,               // Lighting
     furniture,              // Furniture
     storage_solutions,      // Storage Solutions
-    pet_supplies            // Pet Supplies
+    pet_supplies,      // Pet Supplies
+    linkedin_icon,
+    facebook_icon,
+    instagram_icon,
+    twitter_icon           
 }
 
 export const products = [

@@ -30,6 +30,7 @@ import AdminNavbar from "./admin/components/AdminNavbar";
 import AdminSidebar from "./admin/components/AdminSidebar";
 import Info from "./pages/Info";
 
+
 const App = () => {
   return (
     <div className="min-h-screen flex flex-col font-[Outfit] overflow-x-hidden">

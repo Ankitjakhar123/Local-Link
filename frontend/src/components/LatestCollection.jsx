@@ -27,8 +27,8 @@ const LatestCollection = () => {
     }
   }, [products]);
 
-  const handleCategoryClick = (filter) => {
-    navigate(`/collection?category=${filter}`);
+  const handleCategoryClick = (categoryName) => {
+    navigate(`/collection?category=${encodeURIComponent(categoryName)}`);
   };
 
   const handleProductClick = (id) => {
@@ -55,7 +55,7 @@ const LatestCollection = () => {
           <div
             key={idx}
             className="cursor-pointer group relative bg-white/30 dark:bg-white/10 backdrop-blur-lg border border-white/30 dark:border-white/20 rounded-2xl p-5 flex flex-col items-center justify-center text-center shadow-xl hover:scale-105 transition-transform duration-300"
-            onClick={() => handleCategoryClick(category.filter)}
+            onClick={() => handleCategoryClick(category.name)}
           >
             <div className="w-28 h-28 rounded-full overflow-hidden border-4 border-white shadow-md mb-4">
               <img
